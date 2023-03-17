@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utilitaire.Utilitaire;
 import etu1808.framework.Mapping;
+import etu1808.framework.annotation.Url;
+import etu1808.framework.trtmt.Traitement;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  *
@@ -20,6 +24,27 @@ import etu1808.framework.Mapping;
  */
 public class FrontServlet extends HttpServlet {
     HashMap<String, Mapping> mappingUrls;
+    
+    public void init()throws ServletException{
+        Traitement trtmt = new Traitement();
+        try {
+            Class[] allClass = trtmt.getAllClass("etu1808.framework.model");
+            
+            for (Class allClas : allClass) {
+                Method[] method = trtmt.getAllMethodWithAnnotation(allClas, Url.class);
+                if (method == null) {
+                    for (Method method1 : method) {
+                        Url url = (Url) method1.getAnnotation(Url.class);
+                        this.mappingUrls.put(url.url(), new Mapping(allClas.getName(), method1.getName()));
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            
+        }
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -29,6 +54,8 @@ public class FrontServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response, String url)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -46,9 +73,22 @@ public class FrontServlet extends HttpServlet {
 
 //
 //            for (String url1 : links) {
-                out.println(links);
 //            }
-            
+
+            try {
+                for (Map.Entry<String, Mapping> entry : mappingUrls.entrySet()) {
+                    out.print(entry.getKey());
+                    out.print(entry.getValue().getClassName());
+                    out.print(entry.getValue().getMethod());
+                    
+//                    Object key = entry.getKey();
+//                    Object val = entry.getValue();
+                    
+                }
+            } catch (Exception e) {
+            }
+            out.println(links);
+        
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,6 +107,7 @@ public class FrontServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response, request.getRequestURL().toString());
+        init();
     }
 
     /**

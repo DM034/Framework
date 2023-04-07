@@ -2,79 +2,104 @@ package etu1808.framework.trtmt;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class Traitement{
+    
+    public static Object getValModelView(String classname, String methodname){
+        Object val = new Object();
+        try{
+            Class classe = Class.forName(classname);
+            Object call = classe.newInstance();
+            Method methode = classe.getDeclaredMethod(methodname);
+            val = methode.invoke(call);
+        }catch(Exception e){
+            e.getMessage();
+        }
+        return val;
+    } 
+    public static Class[] getAllClass() throws Exception{
+        String path = Traitement.class.getClassLoader().getResource("").getPath();
+        Vector<String> str = getClassesName(new File(path));
+        Class[] valiny = new Class[str.size()];
+        for (int i = 0; i < valiny.length; i++) {
+                   
+            valiny[i] = Class.forName(str.get(i));
+        }
+        return valiny;
+    }   
+    
+    public static Vector<String> getClassesName(File dir) throws Exception{
+        Vector<String> all = new Vector<>();
+        try {
+            File[] files = dir.listFiles();
+            for (File file : files) {
+                    if (file.isDirectory() == true) {
+                        Vector<String> rec = Traitement.getClassesName(file);
+                        for(int i = 0;i < rec.size();i++){
+                            all.add(file.getName()+"."+rec.get(i));
+                        }
+                    } else {
+                        if(file.getName().endsWith(".class")){
+                            all.add((file.getName()).substring(0,file.getName().length()-6));
+                        }
+                    }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return all;
+    }
+    
 
-        public Class[] getAllClass(String packageName) throws Exception{
-        File dir = new File(packageName);
-        Class[] result = null;
-        if(dir.exists()==true){
-            String[] classes = dir.list();
-            result = new Class[classes.length];
-            for (int i = 0; i < classes.length; i++) {
-              result[i] = Class.forName(packageName+"."+classes[i].substring(0, classes[i].lastIndexOf(".class")));
-                
+
+    public static Class[] getClassesWithAnnotation(Class[] all,Class annotation) throws Exception{
+
+        Vector<Class> valiny = new Vector<>();
+        for (int i = 0; i < all.length; i++) {
+            if(all[i].isAnnotationPresent(annotation) == true){
+                valiny.add(all[i]);
             }
         }
-        return result;
+
+        Object[] rep = valiny.toArray();
+
+        Class[] fin = Arrays.copyOf(rep, rep.length,Class[].class);
+
+        return fin;
     }
-    public Class[] getAllClassWithAnnotation(String packageName,Class annotation) throws Exception{
-       Class[] classes = getAllClass(packageName);
-    
-       Class[] result = new Class[1];
-    
-     
-        Vector<Class> v;
-        v = new Vector<>();
-        for (Class classe : classes) {
-            if (classe.isAnnotationPresent(annotation) == true) {
-                v.add(classe);
+
+    public static Field[] getFieldsWithAnnotation(Class toCheck,Class annotation) throws Exception{
+        Field[] allFields = toCheck.getDeclaredFields();
+        Vector<Field> valiny = new Vector<>();
+        for (int i = 0; i < allFields.length; i++) {
+            if(allFields[i].isAnnotationPresent(annotation) == true){
+                valiny.add(allFields[i]);
             }
         }
-        result = new Class[v.size()];
-        for (int i = 0; i < v.size(); i++) {
-            result[i] = v.get(i);
-            
-        }
-       
-       return result;
+
+        Object[] rep = valiny.toArray();
+
+        Field[] fin = Arrays.copyOf(rep, rep.length,Field[].class);
+
+        return fin;
     }
-    public Field[] getAllFieldWithAnnotation(Class object,Class annotation)throws Exception{
-        Field[] champs = object.getDeclaredFields();
-        Field[] result = new Field[1];
-        
-        Vector<Field> v = new Vector<>();
-        
-        for (Field champ : champs) {
-            if (champ.isAnnotationPresent(annotation) == true) {
-                v.add(champ);
+
+    public static Method[] getAllMethodWithAnnotation(Class toCheck,Class annotation) throws Exception{
+        Method[] allMethods = toCheck.getDeclaredMethods();
+
+        Vector<Method> valiny = new Vector<>();
+        for (int i = 0; i < allMethods.length; i++) {
+            if(allMethods[i].isAnnotationPresent(annotation) == true){
+                valiny.add(allMethods[i]);
             }
         }
-        result = new Field[v.size()];
-        for (int i = 0; i < v.size(); i++) {
-            result[i] = v.get(i);
-            
-        }
-        return result;
-    }
- 
-    public Method[] getAllMethodWithAnnotation(Class object,Class annotation)throws Exception{
-        Method[] champs = object.getDeclaredMethods();
-        Method[] result = new Method[1];
-        
-        Vector<Method> v = new Vector<>();
-        
-        for (Method champ : champs) {
-            if (champ.isAnnotationPresent(annotation) == true) {
-                v.add(champ);
-            }
-        }
-        result = new Method[v.size()];
-        for (int i = 0; i < v.size(); i++) {
-            result[i] = v.get(i);
-            
-        }
-        return result;
+
+        Object[] rep = valiny.toArray();
+
+        Method[] fin = Arrays.copyOf(rep, rep.length,Method[].class);
+
+        return fin;
     }
 }

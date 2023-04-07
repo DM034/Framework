@@ -3,21 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package utilitaire;
-import trtmt.Traitement;
+import etu1808.framework.trtmt.Traitement;
 /**
  *
  * @author dm
  */
 public class Utilitaire {
-    public static String getUrl(String Url, String contextpath){
-            String result;
-            String[] val = Url.split(contextpath);
-            if(val.length==1){
-                result = "/";
+    public static String[] getUrl(String Url) throws Exception{
+            String[] reg = Url.split("/");
+            System.out.println(reg.length);
+            if(reg.length >= 5){
+                return reg;
             }else{
-                result = val[1];
+                throw new Exception("tsy misy");
             }
-            return result;
             
         
     }

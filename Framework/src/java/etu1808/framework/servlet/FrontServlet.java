@@ -13,31 +13,51 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utilitaire.Utilitaire;
 import etu1808.framework.Mapping;
+import etu1808.framework.ModelView;
 import etu1808.framework.annotation.Url;
 import etu1808.framework.trtmt.Traitement;
 import java.lang.reflect.Method;
 import java.util.Map;
+import javax.servlet.RequestDispatcher;
+
 
 /**
  *
  * @author dm
  */
 public class FrontServlet extends HttpServlet {
-    HashMap<String, Mapping> mappingUrls;
+    HashMap<String, Mapping> mappingUrls = new HashMap<>();
     
+    public Mapping getMapping(String Url) throws Exception{
+        Mapping map = new Mapping(null, null);
+        for (Map.Entry<String, Mapping> entry : mappingUrls.entrySet()) {
+            if(Url.compareToIgnoreCase(entry.getKey())==0){
+                map = entry.getValue();
+            }
+            else{
+                throw new Exception("Tsy misy");
+            }
+        }
+        return map;
+    }
+    
+    @Override
     public void init()throws ServletException{
         Traitement trtmt = new Traitement();
         try {
-            Class[] allClass = trtmt.getAllClass("etu1808.framework.model");
+            Class[] allClass = trtmt.getAllClass();
             
             for (Class allClas : allClass) {
                 Method[] method = trtmt.getAllMethodWithAnnotation(allClas, Url.class);
-                if (method == null) {
+               
                     for (Method method1 : method) {
-                        Url url = (Url) method1.getAnnotation(Url.class);
+                        Url url = (Url) method1.getAnnotation(Url.class);        
                         this.mappingUrls.put(url.url(), new Mapping(allClas.getName(), method1.getName()));
+                        System.out.println("Class "+allClas.getName());
+                        System.out.println("Method "+method1.getName());
+
                     }
-                }
+                
             }
             
         } catch (Exception e) {
@@ -58,6 +78,7 @@ public class FrontServlet extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response, String url)
             throws ServletException, IOException {
+        Traitement trtmt = new Traitement();
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -68,14 +89,17 @@ public class FrontServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FrontServlet at " + request.getContextPath() + "</h1>");
-            
-            String links =  new Utilitaire().getUrl(url,request.getContextPath().toString());
+                        out.println("sdfgfdhd");             
+                        out.println("sdfgfdhd");
+
+
 
 //
 //            for (String url1 : links) {
 //            }
 
             try {
+            String links =  Utilitaire.getUrl(url)[4];
                 for (Map.Entry<String, Mapping> entry : mappingUrls.entrySet()) {
                     out.print(entry.getKey());
                     out.print(entry.getValue().getClassName());
@@ -85,9 +109,21 @@ public class FrontServlet extends HttpServlet {
 //                    Object val = entry.getValue();
                     
                 }
+                Mapping map = this.getMapping(links);
+                out.print(map.getClassName());
+                out.print(map.getMethod());
+                ModelView mv = (ModelView)trtmt.getValModelView(map.getClassName(), map.getMethod());
+                        out.println(mv.getView());
+
+                RequestDispatcher rd = request.getRequestDispatcher("/page/"+mv.getView());
+                rd.forward(request, response);
+                
             } catch (Exception e) {
+                e.getMessage();
+              out.println(e.getMessage());
+              e.printStackTrace();
             }
-            out.println(links);
+            
         
             out.println("</body>");
             out.println("</html>");

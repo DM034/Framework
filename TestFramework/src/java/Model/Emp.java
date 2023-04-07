@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+import etu1808.framework.ModelView;
 import etu1808.framework.annotation.Url;
 /**
  *
@@ -18,7 +19,16 @@ public class Emp {
         this.fname = fname;
     }
 
+    public Emp() {
+    }
+
     @Url(url = "emp-all")
+    public ModelView findEmp(){
+        ModelView mv = new ModelView();
+        mv.setView("getEmp.jsp");
+        return mv;
+    }
+    
     public String getName() {
         return name;
     }

@@ -1,11 +1,16 @@
 package modele;
-import etu1767.framework.*;
+import etu1808.framework.*;
 public class Departement{
     String nomDeDepartement;
     int nombreEmploye;
     @Url(method = "dept-jsp")
     public ModelView myJsp(){
         ModelView modelView = new ModelView("departement.jsp");
+        return modelView;
+    }
+    @Url(method = "add-dept")
+    public ModelView addEmploye(){
+        ModelView modelView = new ModelView("sprint70.jsp");
         return modelView;
     }
     public String getNomDeDepartement() {

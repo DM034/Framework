@@ -1,6 +1,6 @@
 package modele;
-import etu1767.framework.ModelView;
-import etu1767.framework.Url;
+import etu1808.framework.ModelView;
+import etu1808.framework.Url;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,11 @@ public class Employe {
             System.out.println(employes.get(i).getNom());
         }
         modelView.addItem("allEmploye", employes); 
+        return modelView;
+    }
+    @Url(method = "add-emp")
+    public ModelView addEmploye(){
+        ModelView modelView = new ModelView("sprint71.jsp");
         return modelView;
     }
     public int getId() {

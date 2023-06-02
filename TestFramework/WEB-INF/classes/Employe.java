@@ -22,7 +22,7 @@ public class Employe {
         this.setPrenom(prenom);;
         this.setDate_de_naissance(date_de_naissance);;
     }
-    @Url(method = "emp-jsp")
+    @Url(method = "emp-jsp.gg")
     public ModelView methodeAAnnoter(){
         ModelView modelView = new ModelView("employe.jsp");
         return modelView;
@@ -39,20 +39,20 @@ public class Employe {
         return employes;
     }
 
-    @Url(method = "get-emp")
+    @Url(method = "get-emp.gg")
     public ModelView getAllEmploye(){
         ModelView modelView = new ModelView("listeEmp.jsp");
         List<Employe> employes = listeEmployers();
         modelView.addItem("allEmploye", employes); 
         return modelView;
     }
-    @Url(method = "add-emp")
+    @Url(method = "add-emp.gg")
     public ModelView addEmploye(){
         ModelView modelView = new ModelView("sprint71.jsp");
         return modelView;
     }
     
-    @Url(method = "add-emp-with-arguments")
+    @Url(method = "add-emp-with-arguments.gg")
     @Arguments(arguments = {"id", "nom", "prenom", "date_de_naissance"})
     public ModelView addEmployeWithArguments(int id, String nom, String prenom, Date date_de_naissance){
         ModelView modelView = new ModelView("sprint8.jsp");

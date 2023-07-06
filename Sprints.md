@@ -15,5 +15,9 @@
     -Récupérer les valeurs des fields des classes et puis ajouter dans data et renvoyer dans le modelView correspondant et afficher les valeurs
 -Sprint 7:
     -Envoi de valeur venant de la vue dans FrontServlet
-    -Le nom de l' attribut de l' inpur envoyée doit être la même que le nom de l'attribut dans la classe modèle 
+    -Le nom de l' attribut de l' input envoyée doit être la même que le nom de l'attribut dans la classe modèle 
+    -le matching entre ces deux se fait dans frontservlet
+-Sprint 8:
+    -Envoi de valeur venant de la vue dans FrontServlet 
+    -Le nom de l' attribut de l' input envoyée doit être la même que le nom de l'argument dans l' annotation Arguments qui contient les noms des arguments de la méthode dans la classe modèle 
     -le matching entre ces deux se fait dans frontservlet

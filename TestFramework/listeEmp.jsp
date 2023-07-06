@@ -1,4 +1,4 @@
-<%@page import="etu1808.framework.*, modele.Employe, java.util.*"%>
+<%@page import="etu1767.framework.*, modele.Employe, java.util.*"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>

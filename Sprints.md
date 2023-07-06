@@ -21,3 +21,5 @@
     -Envoi de valeur venant de la vue dans FrontServlet 
     -Le nom de l' attribut de l' input envoyée doit être la même que le nom de l'argument dans l' annotation Arguments qui contient les noms des arguments de la méthode dans la classe modèle 
     -le matching entre ces deux se fait dans frontservlet
+-Sprint 8-bis:
+    -Ajout de l'éxtension .gg pour ne pas avoir un erreur de path
